@@ -20,7 +20,11 @@ module OrmAdapter
     # @see OrmAdapter::Base#find_first
     def find_first(options = {})
       conditions, order = extract_conditions!(options)
-      klass.where(conditions_to_fields(conditions)).order(*order_clause(order)).first
+      if order.present?
+        klass.where(conditions_to_fields(conditions)).order(*order_clause(order)).first
+      else
+        klass.where(conditions_to_fields(conditions)).first
+      end
     end
 
     # @see OrmAdapter::Base#find_all
